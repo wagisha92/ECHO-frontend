@@ -2,13 +2,26 @@
   box-sizing: border-box;
 }
 
-body {
+html,
+body,
+#root {
   margin: 0;
-  font-family: Arial, sans-serif;
+  width: 100%;
+  min-height: 100%;
 }
 
+body {
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+
+/* =========================================
+   MAIN DASHBOARD
+========================================= */
+
 .dashboard {
-  height: 100vh;
+  min-height: 100vh;
 
   display: grid;
 
@@ -18,7 +31,9 @@ body {
 }
 
 
-/* Header */
+/* =========================================
+   HEADER
+========================================= */
 
 .header {
   grid-column: 1 / 3;
@@ -38,10 +53,17 @@ body {
 
 .header h1 {
   margin: 0;
+  font-size: 28px;
+}
+
+.header span {
+  font-size: 16px;
 }
 
 
-/* Alert panel */
+/* =========================================
+   ALERT PANEL
+========================================= */
 
 .alerts-panel {
   padding: 15px;
@@ -49,6 +71,8 @@ body {
   background: #f4f6f7;
 
   overflow-y: auto;
+
+  min-width: 0;
 }
 
 .alerts-panel h2 {
@@ -56,7 +80,9 @@ body {
 }
 
 
-/* Alert card */
+/* =========================================
+   ALERT CARD
+========================================= */
 
 .alert-card {
   background: white;
@@ -69,14 +95,32 @@ body {
 
   cursor: pointer;
 
-  border-left: 5px solid #e74c3c;
+  border-left: 5px solid #999;
 
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  transition: 0.2s;
 }
 
 .alert-card:hover {
-  transform: translateY(-2px);
+  transform: translateX(3px);
 }
+
+
+/* Selected alert */
+
+.alert-card.selected {
+  outline: 2px solid #333;
+
+  transform: translateX(5px);
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================================
+   ALERT CARD HEADER
+========================================= */
 
 .alert-card-header {
   display: flex;
@@ -84,10 +128,18 @@ body {
   justify-content: space-between;
 
   align-items: center;
+
+  gap: 10px;
+}
+
+.alert-card-header strong {
+  overflow-wrap: anywhere;
 }
 
 
-/* Risk labels */
+/* =========================================
+   RISK LABELS
+========================================= */
 
 .risk {
   padding: 4px 8px;
@@ -97,43 +149,76 @@ body {
   font-size: 12px;
 
   font-weight: bold;
+
+  white-space: nowrap;
+}
+
+
+/* Red */
+
+.alert-card.red {
+  border-left-color: #e53935;
 }
 
 .risk.red {
-  background: #e74c3c;
-
+  background: #e53935;
   color: white;
+}
+
+
+/* Yellow */
+
+.alert-card.yellow {
+  border-left-color: #f9a825;
 }
 
 .risk.yellow {
-  background: #f1c40f;
-
+  background: #f9a825;
   color: black;
 }
 
-.risk.green {
-  background: #2ecc71;
 
+/* Green */
+
+.alert-card.green {
+  border-left-color: #43a047;
+}
+
+.risk.green {
+  background: #43a047;
   color: white;
 }
 
 
-/* Map */
+/* =========================================
+   MAP
+========================================= */
 
 .map-area {
   position: relative;
 
+  width: 100%;
+
   height: 100%;
+
+  min-width: 0;
 }
-/* Sidebar */
+
+
+/* =========================================
+   SIDEBAR
+========================================= */
 
 .sidebar {
   position: fixed;
 
   right: 0;
+
   top: 70px;
 
   width: 350px;
+
+  max-width: 100vw;
 
   height: calc(100vh - 70px);
 
@@ -149,7 +234,9 @@ body {
 }
 
 
-/* Close button */
+/* =========================================
+   CLOSE BUTTON
+========================================= */
 
 .close-button {
   float: right;
@@ -161,10 +248,14 @@ body {
   font-size: 20px;
 
   cursor: pointer;
+
+  padding: 5px;
 }
 
 
-/* Status badges */
+/* =========================================
+   STATUS BADGES
+========================================= */
 
 .status-badge {
   display: inline-block;
@@ -199,7 +290,9 @@ body {
 }
 
 
-/* Validation buttons */
+/* =========================================
+   VALIDATION BUTTONS
+========================================= */
 
 .validate-button,
 .false-button {
@@ -229,59 +322,277 @@ body {
 
   color: white;
 }
-/* Risk-based alert cards */
 
-.alert-card {
-  border-left: 5px solid #999;
-  cursor: pointer;
-  transition: 0.2s;
+
+/* =========================================
+   TABLET
+   601px - 900px
+========================================= */
+
+@media (max-width: 900px) {
+
+  .dashboard {
+    grid-template-columns: 240px 1fr;
+
+    grid-template-rows: 65px 1fr;
+  }
+
+
+  .header {
+    padding: 0 15px;
+  }
+
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+
+  .header span {
+    font-size: 14px;
+  }
+
+
+  .alerts-panel {
+    padding: 10px;
+  }
+
+
+  .alert-card {
+    padding: 12px;
+  }
+
+
+  .sidebar {
+    top: 65px;
+
+    height: calc(100vh - 65px);
+
+    width: 320px;
+  }
 }
 
-.alert-card:hover {
-  transform: translateX(3px);
+
+/* =========================================
+   PHONE
+   600px AND BELOW
+========================================= */
+
+@media (max-width: 600px) {
+
+  .dashboard {
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 100vh;
+  }
+
+
+  /* Header */
+
+  .header {
+
+    width: 100%;
+
+    min-height: 60px;
+
+    height: auto;
+
+    padding: 12px 15px;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+  }
+
+
+  .header h1 {
+    font-size: 22px;
+  }
+
+
+  .header span {
+    font-size: 13px;
+  }
+
+
+  /* Map comes first on phone */
+
+  .map-area {
+
+    order: 1;
+
+    width: 100%;
+
+    height: 55vh;
+
+    min-height: 300px;
+  }
+
+
+  /* Alerts below map */
+
+  .alerts-panel {
+
+    order: 2;
+
+    width: 100%;
+
+    max-height: 45vh;
+
+    overflow-y: auto;
+
+    padding: 12px;
+  }
+
+
+  .alerts-panel h2 {
+    font-size: 20px;
+  }
+
+
+  /* Alert cards */
+
+  .alert-card {
+
+    padding: 12px;
+
+    margin-bottom: 8px;
+  }
+
+
+  .alert-card-header {
+    gap: 8px;
+  }
+
+
+  .alert-card p {
+    margin: 7px 0;
+
+    font-size: 14px;
+  }
+
+
+  /* Selected alert */
+
+  .alert-card.selected {
+    transform: none;
+  }
+
+
+  /* Sidebar becomes mobile bottom panel */
+
+  .sidebar {
+
+    top: auto;
+
+    bottom: 0;
+
+    left: 0;
+
+    right: 0;
+
+    width: 100%;
+
+    max-width: 100%;
+
+    height: auto;
+
+    max-height: 75vh;
+
+    padding: 18px;
+
+    border-radius: 15px 15px 0 0;
+
+    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.25);
+  }
+
+
+  .sidebar h2 {
+    font-size: 21px;
+  }
+
+
+  .sidebar h3 {
+    font-size: 16px;
+  }
+
+
+  .sidebar p {
+    font-size: 14px;
+
+    overflow-wrap: anywhere;
+  }
+
+
+  /* Buttons */
+
+  .validate-button,
+  .false-button {
+
+    padding: 13px;
+
+    font-size: 15px;
+  }
 }
 
 
-/* Red alert */
+/* =========================================
+   VERY SMALL PHONES
+   400px AND BELOW
+========================================= */
 
-.alert-card.red {
-  border-left-color: #e53935;
-}
+@media (max-width: 400px) {
 
-
-/* Yellow alert */
-
-.alert-card.yellow {
-  border-left-color: #f9a825;
-}
+  .header {
+    padding: 10px 12px;
+  }
 
 
-/* Green alert */
-
-.alert-card.green {
-  border-left-color: #43a047;
-}
+  .header h1 {
+    font-size: 20px;
+  }
 
 
-/* Risk badges */
+  .header span {
+    font-size: 12px;
+  }
 
-.risk.red {
-  color: #e53935;
-  font-weight: bold;
-}
 
-.risk.yellow {
-  color: #f9a825;
-  font-weight: bold;
-}
+  .map-area {
+    height: 50vh;
 
-.risk.green {
-  color: #43a047;
-  font-weight: bold;
-}
+    min-height: 280px;
+  }
 
-.alert-card.selected {
-  outline: 2px solid #333;
-  transform: translateX(5px);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+
+  .alerts-panel {
+    max-height: 50vh;
+  }
+
+
+  .alert-card {
+    padding: 10px;
+  }
+
+
+  .alert-card-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .risk {
+    font-size: 11px;
+  }
+
+
+  .sidebar {
+    padding: 15px;
+
+    max-height: 80vh;
+  }
 }

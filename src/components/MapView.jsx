@@ -10,6 +10,15 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 
+/*
+  Create a custom marker based on the alert risk level.
+
+  Red    → high risk
+  Yellow → medium risk
+  Green  → low risk
+
+  Selected alert gets a larger marker and glow.
+*/
 function createRiskIcon(riskLevel, isSelected) {
 
   let color = "green";
@@ -25,6 +34,7 @@ function createRiskIcon(riskLevel, isSelected) {
 
   return L.divIcon({
     className: "",
+
     html: `
       <div
         style="
@@ -42,16 +52,31 @@ function createRiskIcon(riskLevel, isSelected) {
         "
       ></div>
     `,
-    iconSize: [size + border * 2, size + border * 2],
+
+    iconSize: [
+      size + border * 2,
+      size + border * 2
+    ],
+
     iconAnchor: [
       (size + border * 2) / 2,
       (size + border * 2) / 2
     ],
-    popupAnchor: [0, -(size / 2)]
+
+    popupAnchor: [
+      0,
+      -(size / 2)
+    ]
   });
 }
 
 
+/*
+  MapView receives:
+
+  alerts       → alerts coming from the backend
+  selectedAlert → alert currently selected in the dashboard
+*/
 function MapView({ alerts, selectedAlert }) {
 
   return (
@@ -59,11 +84,21 @@ function MapView({ alerts, selectedAlert }) {
     <MapContainer
       center={[20.2961, 85.8245]}
       zoom={13}
+
+      /*
+        IMPORTANT:
+        The map now fills the entire map-area.
+
+        App.css controls the responsive height
+        for desktop, tablet and mobile.
+      */
       style={{
-        height: "500px",
+        height: "100%",
         width: "100%"
       }}
     >
+
+      {/* OpenStreetMap background */}
 
       <TileLayer
         attribution="&copy; OpenStreetMap contributors"
@@ -71,19 +106,29 @@ function MapView({ alerts, selectedAlert }) {
       />
 
 
-      {/* Create a marker for every backend alert */}
+      {/* =====================================
+          BACKEND ALERT MARKERS
+      ====================================== */}
 
       {alerts.map((alert) => (
 
         <Marker
           key={alert.alert_id}
+
           position={[
             alert.latitude,
             alert.longitude
           ]}
-          icon={createRiskIcon(alert.risk_level,
-            selectedAlert?.alert_id === alert.alert_id)}
+
+          icon={createRiskIcon(
+            alert.risk_level,
+            selectedAlert?.alert_id === alert.alert_id
+          )}
         >
+
+          {/* =================================
+              ALERT POPUP
+          ================================= */}
 
           <Popup>
 
@@ -104,7 +149,6 @@ function MapView({ alerts, selectedAlert }) {
             Status: {alert.status}
 
             <br />
-
             <br />
 
             <strong>
@@ -114,6 +158,21 @@ function MapView({ alerts, selectedAlert }) {
             <br />
 
             {alert.evidence}
+
+            <br />
+            <br />
+
+            <strong>
+              Location:
+            </strong>
+
+            <br />
+
+            Latitude: {alert.latitude}
+
+            <br />
+
+            Longitude: {alert.longitude}
 
           </Popup>
 
